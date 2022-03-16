@@ -7,6 +7,8 @@ authors = ["Fuminori Hakoishi(ERi19008) <fuminori.hakoishi@erii.co.jp>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Pillow = "^9.0.1"
+folium = "^0.12.1"
+pandas = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
