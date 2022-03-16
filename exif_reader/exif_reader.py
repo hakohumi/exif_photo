@@ -40,13 +40,13 @@ class ExifImage:
 
         print(location)
 
-    def print_geo_deg(self):
+    def get_geo_deg(self) -> tuple[float, float] | None:
         if self.exif.get("GPSInfo", None) is None:
             print("GPSInfoがありません。")
-            return
+            return None
 
         gps = self.exif["GPSInfo"]
-        print(calc_deg(gps))
+        return calc_deg(gps)
 
 
 def getpos(dr, value):
@@ -56,7 +56,7 @@ def getpos(dr, value):
     return f"{d}°{m}'" + f'{s}"{dr}'  # 'を含む文字列を""で "を含む文字列を''で囲む
 
 
-def calc_deg(gps_info: dict):
+def calc_deg(gps_info: dict) -> tuple[float, float] | None:
     if not("GPSLatitude" in gps_info and
             "GPSLatitudeRef" in gps_info and
             "GPSLongitude" in gps_info and
@@ -91,4 +91,4 @@ def calc_deg(gps_info: dict):
     lat_ang0 = lat_sign * lat[0] + lat[1] / 60 + lat[2] / 3600
     lon_ang0 = lon_sign * lon[0] + lon[1] / 60 + lon[2] / 3600
 # コンマ区切りで１つにまとめる
-    return str(lat_ang0) + ', ' + str(lon_ang0)
+    return lat_ang0, lon_ang0
