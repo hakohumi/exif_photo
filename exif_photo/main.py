@@ -7,7 +7,7 @@ import folium
 
 if __name__ == "__main__":
     def search_file(search_dir: str) -> list[str]:
-        filepaths = glob.glob(search_dir)
+        filepaths = glob.glob(search_dir, recursive=True)
         if not filepaths:
             print(f"{search_dir}は画像ファイルが存在しません。")
             return []
@@ -15,6 +15,8 @@ if __name__ == "__main__":
 
     def _main():
         filepaths = search_file("./images/**/*.png")
+        filepaths.extend(search_file("./images/**/**.jpg"))
+
         if not filepaths:
             print("画像ファイルが見つかりませんでした。")
             return
