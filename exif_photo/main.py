@@ -15,7 +15,9 @@ if __name__ == "__main__":
 
     def _main():
         filepaths = search_file("./images/**/*.png")
-        filepaths.extend(search_file("./images/**/*.jpg"))
+        if not filepaths:
+            print("画像ファイルが見つかりませんでした。")
+            return
 
         markers: list[Marker] = []
 
