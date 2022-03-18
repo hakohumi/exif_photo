@@ -6,6 +6,8 @@ import glob
 import webbrowser
 
 import folium
+from folium import plugins
+
 
 if __name__ == "__main__":
     def search_file(search_dir: str) -> list[str]:
@@ -37,11 +39,13 @@ if __name__ == "__main__":
             marker = Marker(path, location)
             markers.append(marker)
 
+        print()
+
         map = folium.Map(
             location=markers[0].location,
             zoom_start=20)
 
-        print()
+        marker_cluster = plugins.MarkerCluster().add_to(map)
 
         for marker in markers:
             filepath = marker.filepath[-10:-1]
@@ -56,12 +60,16 @@ if __name__ == "__main__":
             # 地図オブジェクトにプロット
             folium.Marker(
                 location=marker.location,
-                popup=p_up).add_to(map)
+                popup=p_up).add_to(marker_cluster)
 
         # 地図表示
         map.save('index.html')
 
         webbrowser.open("index.html")
+
         print("finish")
+
+    def marker_help():
+        help(plugins.MarkerCluster)
 
     _main()
