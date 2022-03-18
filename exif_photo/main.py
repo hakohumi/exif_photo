@@ -45,16 +45,18 @@ if __name__ == "__main__":
         # マーカークラスターのレイヤーを作成
         marker_cluster = plugins.MarkerCluster().add_to(map)
 
-        for marker in image_markers:
+        for index, marker in enumerate(image_markers, 0):
             file_name = marker.filepath.name
             file_path = marker.filepath.as_posix()
             print(file_path)
             # ポップアップの作成(「show=True」で常に表示)
-            # TODO: ポップアップにExifの情報を載せたい
+            exif_info = "<br>".join(
+                [f"{key}: {value}" for key, value in marker.exif_image.exif.items()])
+
             p_up = folium.Popup(
-                html=f"<center>{file_name}<br><img width='100%' src='{file_path}'></center>",
+                html=f"<center>{index}: {file_name}</center><br><div style='display: flex'><div><img width='90%' src='{file_path}'></div><div>{exif_info}</div></div>",
                 min_width=0,
-                max_width=1000,
+                max_width=500,
                 show=True)
 
             # 地図オブジェクトにプロット
