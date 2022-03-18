@@ -1,5 +1,4 @@
 from exif_photo.ImageMarker import ImageMarker
-from exif_reader import exif_reader as ERead
 
 # ファイル操作
 from pathlib import Path
