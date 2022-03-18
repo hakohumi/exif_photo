@@ -1,7 +1,8 @@
 from exif_reader import exif_reader as ERead
 from Marker import Marker
 
-import glob
+# ファイル操作
+from pathlib import Path
 
 import webbrowser
 
@@ -10,16 +11,18 @@ from folium import plugins
 
 
 if __name__ == "__main__":
-    def search_file(search_dir: str) -> list[str]:
-        filepaths = glob.glob(search_dir, recursive=True)
+    def search_file(search_dir: str, pattern: str) -> list[Path]:
+        path = Path(search_dir)
+        filepaths: list[Path] = list(path.glob(pattern))
         if not filepaths:
             print(f"{search_dir}は画像ファイルが存在しません。")
             return []
+
         return filepaths
 
     def _main():
-        filepaths = search_file("./images/**/*.png")
-        filepaths.extend(search_file("./images/**/**.jpg"))
+        filepaths = search_file("./images/", "**/*.png")
+        filepaths.extend(search_file("./images/", "**/*.jpg"))
 
         if not filepaths:
             print("画像ファイルが見つかりませんでした。")
@@ -48,11 +51,12 @@ if __name__ == "__main__":
         marker_cluster = plugins.MarkerCluster().add_to(map)
 
         for marker in markers:
-            filepath = marker.filepath[-10:-1]
-            print(filepath)
+            file_name = marker.filepath.as_posix().split("\\")[-1]
+            # filepath = marker.filepath
+            print(marker.filepath.as_posix())
             # ポップアップの作成(「show=True」で常に表示)
             p_up = folium.Popup(
-                filepath,
+                html=f"<center>{file_name}<br><img width='100%' src='{marker.filepath.as_posix()}'></center>",
                 min_width=0,
                 max_width=1000,
                 show=True)

@@ -1,5 +1,8 @@
 
+from pathlib import Path
+
+
 class Marker:
-    def __init__(self, filepath: str, location: tuple[float, float]):
-        self.filepath = filepath
-        self.location = location
+    def __init__(self, filepath: Path, location: tuple[float, float]):
+        self.filepath: Path = filepath
+        self.location: tuple[float, float] = location
