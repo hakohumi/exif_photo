@@ -1,3 +1,4 @@
+from typing import Any
 from PIL import Image, ExifTags
 
 
@@ -6,13 +7,14 @@ class ExifImage:
         self.file_name: str = file_name
         # 画像ファイルを開く --- (*1)
         self.img = Image.open(file_name)
-        self.exif = {}
+        self.exif: dict[int | str, Any] = {}
 
         if (self.img.getexif()):
             exif = self.img.getexif()
             for key, value in self.img.getexif().items():
                 if ("GPSInfo" == ExifTags.TAGS.get(key, key)):
-                    gps_info = exif.get_ifd(key)
+                    gps_info: dict[int, Any] = exif.get_ifd(key)
+
                     self.exif["GPSInfo"] = {
                         ExifTags.GPSTAGS.get(key, key): value
                         for key, value in gps_info.items()
@@ -20,7 +22,7 @@ class ExifImage:
                 else:
                     self.exif |= {ExifTags.TAGS.get(key, key): value}
 
-    def get_exif(self):
+    def print_exif(self):
         if self.exif:
             for k, v in self.exif.items():
                 print(k, ":", v)
