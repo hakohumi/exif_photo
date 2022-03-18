@@ -2,10 +2,10 @@ from PIL import Image, ExifTags
 
 
 class ExifImage:
-
-    def __init__(self, fname):
+    def __init__(self, file_name):
+        self.file_name: str = file_name
         # 画像ファイルを開く --- (*1)
-        self.img = Image.open(fname)
+        self.img = Image.open(file_name)
         self.exif = {}
 
         if (self.img.getexif()):
@@ -20,7 +20,7 @@ class ExifImage:
                 else:
                     self.exif |= {ExifTags.TAGS.get(key, key): value}
 
-    def print(self):
+    def get_exif(self):
         if self.exif:
             for k, v in self.exif.items():
                 print(k, ":", v)

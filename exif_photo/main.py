@@ -1,5 +1,5 @@
+from exif_photo.ImageMarker import ImageMarker
 from exif_reader import exif_reader as ERead
-from Marker import Marker
 
 # ファイル操作
 from pathlib import Path
@@ -15,6 +15,7 @@ def search_file(search_dir: str, pattern: str) -> list[Path]:
     filepaths: list[Path] = list(path.glob(pattern))
     if not filepaths:
         print(f"{search_dir}は画像ファイルが存在しません。")
+        # TODO: エラー
         return []
 
     return filepaths
@@ -32,33 +33,25 @@ if __name__ == "__main__":
 
         # 画像ファイルのマーカーオブジェクトの作成
 
-        markers: list[Marker] = []
-
-        for path in filepaths:
-            exif_image = ERead.ExifImage(path)
-            location = exif_image.get_geo_deg()
-            if location is None:
-                # TODO: GPS情報がないファイルも何かしら表示できるようにする
-                continue
-
-            marker = Marker(path, location)
-            markers.append(marker)
+        image_markers: list[ImageMarker] = [
+            ImageMarker(path) for path in filepaths]
 
         print()
 
         # マップ作成
         map = folium.Map(
-            location=markers[0].location,
+            location=image_markers[0].location,
             zoom_start=20)
 
         # マーカークラスターのレイヤーを作成
         marker_cluster = plugins.MarkerCluster().add_to(map)
 
-        for marker in markers:
+        for marker in image_markers:
             file_name = marker.filepath.name
             file_path = marker.filepath.as_posix()
             print(file_path)
             # ポップアップの作成(「show=True」で常に表示)
+            # TODO: ポップアップにExifの情報を載せたい
             p_up = folium.Popup(
                 html=f"<center>{file_name}<br><img width='100%' src='{file_path}'></center>",
                 min_width=0,
