@@ -3,6 +3,8 @@ from Marker import Marker
 
 import glob
 
+import webbrowser
+
 import folium
 
 if __name__ == "__main__":
@@ -59,6 +61,7 @@ if __name__ == "__main__":
         # 地図表示
         map.save('index.html')
 
+        webbrowser.open("index.html")
         print("finish")
 
     _main()
