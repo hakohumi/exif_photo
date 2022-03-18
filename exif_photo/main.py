@@ -3,10 +3,14 @@ from exif_photo.ImageMarker import ImageMarker
 # ファイル操作
 from pathlib import Path
 
-import webbrowser
-
+# マップライブラリ
 import folium
-from folium import plugins
+from folium import LayerControl, plugins
+
+# GIS計算
+from geopy import distance
+
+import webbrowser
 
 
 def search_file(search_dir: str, pattern: str) -> list[Path]:
@@ -43,7 +47,7 @@ if __name__ == "__main__":
             zoom_start=20)
 
         # マーカークラスターのレイヤーを作成
-        marker_cluster = plugins.MarkerCluster().add_to(map)
+        marker_cluster = plugins.MarkerCluster(name="写真").add_to(map)
 
         for index, marker in enumerate(image_markers, 0):
             file_name = marker.filepath.name
@@ -63,6 +67,29 @@ if __name__ == "__main__":
             folium.Marker(
                 location=marker.location,
                 popup=p_up).add_to(marker_cluster)
+
+        # 円の範囲内計算
+        # https://teratail.com/questions/281188
+        redius = 100
+        p_up = folium.Popup(
+            html=f"redius: {redius}",
+            show=True
+        )
+        folium.Circle(
+            location=image_markers[0].location,
+            radius=redius,
+            popup=p_up,
+            color='#3186cc',
+            fill_color='#3186cc').add_to(map)
+
+        # 距離計算
+        dist = distance.distance(
+            image_markers[0].location,
+            image_markers[1].location)
+        print(f"dist: {dist}")
+
+        # レイヤーを切り替えられる
+        LayerControl().add_to(map)
 
         # 地図表示
         map.save('index.html')
