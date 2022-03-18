@@ -43,6 +43,7 @@ class ExifImage:
     def get_geo_deg(self) -> tuple[float, float] | None:
         if self.exif.get("GPSInfo", None) is None:
             print("GPSInfoがありません。")
+            # TODO: エラー
             return None
 
         gps = self.exif["GPSInfo"]
