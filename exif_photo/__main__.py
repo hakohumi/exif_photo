@@ -26,8 +26,14 @@ if __name__ == "__main__":
         else:
             raise ValueError
 
+    def make_map(file_paths: list[str]):
+        image_markers: list[ImageMarker] = [
+            ImageMarker(Path(path)) for path in file_paths]
+
+        Mapper.make_map(image_markers)
+
     def _main():
-        filepaths: list[str] = []
+        file_paths: list[str] = []
         search_dir: str
         try:
             search_dir = check_search_dir_in_arg()
@@ -35,17 +41,14 @@ if __name__ == "__main__":
             print("コマンドライン引数が不正です。")
             return
 
-        filepaths.extend(search_file(search_dir, "**/*.png"))
-        filepaths.extend(search_file(search_dir, "**/*.jpg"))
+        file_paths.extend(search_file(search_dir, "**/*.png"))
+        file_paths.extend(search_file(search_dir, "**/*.jpg"))
 
-        if not filepaths:
+        if not file_paths:
             print(f"{search_dir}は画像ファイルが存在しません。")
             return
 
-        image_markers: list[ImageMarker] = [
-            ImageMarker(Path(path)) for path in filepaths]
-
-        Mapper.make_map(image_markers)
+        make_map(file_paths)
 
         print("finish")
 
