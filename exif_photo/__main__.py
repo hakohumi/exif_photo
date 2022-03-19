@@ -19,10 +19,9 @@ if __name__ == "__main__":
 
     def check_search_dir_in_arg() -> str:
         if len(sys.argv) == 1:
-            print(sys.argv)
-            raise ValueError
+            print("検索ディレクトリの指定がないため、実行ディレクトリ下のimagesディレクトリ内を検索します。")
+            return "./images/"
         elif len(sys.argv) == 2:
-            print(sys.argv)
             return Path(sys.argv[1]).as_posix()
         else:
             raise ValueError
@@ -33,7 +32,8 @@ if __name__ == "__main__":
         try:
             search_dir = check_search_dir_in_arg()
         except ValueError:
-            search_dir = "./images/"
+            print("コマンドライン引数が不正です。")
+            return
 
         filepaths.extend(search_file(search_dir, "**/*.png"))
         filepaths.extend(search_file(search_dir, "**/*.jpg"))

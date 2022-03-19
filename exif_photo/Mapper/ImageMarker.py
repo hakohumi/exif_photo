@@ -13,5 +13,6 @@ class ImageMarker:
 
         try:
             self.location = self.exif_image.get_geo_deg()
-        except Exception:
+        except ValueError:
+            print(f"{self.file_path}: GPSInfoがありません。")
             self.location = None

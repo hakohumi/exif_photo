@@ -33,8 +33,6 @@ def make_map(image_markers: list[ImageMarker]):
         print("locationが不正です")
         return
 
-    print(location)
-
     map = folium.Map(
         location=location,
         zoom_start=20)
