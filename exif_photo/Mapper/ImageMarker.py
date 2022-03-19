@@ -1,7 +1,7 @@
 
 from pathlib import Path
 
-from exif_reader.exif_reader import ExifImage
+from Reader.exif_reader import ExifImage
 
 
 class ImageMarker:
