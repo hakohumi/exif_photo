@@ -22,10 +22,11 @@ class ExifImage:
                 else:
                     self.exif |= {ExifTags.TAGS.get(key, key): value}
 
-    def print_exif(self):
+    def print_all_exif(self):
         if self.exif:
             for k, v in self.exif.items():
                 print(k, ":", v)
+
         else:
             print("exif情報は記録されていません。")
 

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from exif_photo.Mapper.ImageMarker import ImageMarker
 from exif_photo.Mapper import Mapper
+from exif_photo.Reader.exif_reader import ExifImage
 
 
 def search_file(search_dir: str, pattern: str) -> list[str]:
@@ -26,11 +27,25 @@ if __name__ == "__main__":
         else:
             raise ValueError
 
-    def make_map(file_paths: list[str]):
+    def make_gis_map(file_paths: list[str]):
         image_markers: list[ImageMarker] = [
             ImageMarker(Path(path)) for path in file_paths]
 
         Mapper.make_map(image_markers)
+
+    def view_take_device(file_paths: list[str]) -> list[str]:
+        exif_images: list[ExifImage] = [ExifImage(path) for path in file_paths]
+
+        print_filter: list[str] = ["Model"]
+        for x in exif_images:
+            for one_filter in print_filter:
+                if one_filter in x.exif:
+                    print(x.exif[one_filter])
+
+        model_name = [one.exif[one_filter]
+                      if one_filter in one.exif else "fafa" for one in exif_images for one_filter in print_filter]
+
+        return model_name
 
     def _main():
         file_paths: list[str] = []
@@ -48,7 +63,9 @@ if __name__ == "__main__":
             print(f"{search_dir}は画像ファイルが存在しません。")
             return
 
-        make_map(file_paths)
+        view_take_device(file_paths)
+
+        # make_gis_map(file_paths)
 
         print("finish")
 
