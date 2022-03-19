@@ -17,10 +17,10 @@ def search_file(search_dir: str, pattern: str) -> list[str]:
 
 if __name__ == "__main__":
 
-    def check_search_dir_in_arg() -> str | None:
+    def check_search_dir_in_arg() -> str:
         if len(sys.argv) == 1:
             print(sys.argv)
-            return None
+            raise ValueError
         elif len(sys.argv) == 2:
             print(sys.argv)
             return Path(sys.argv[1]).as_posix()
@@ -29,15 +29,17 @@ if __name__ == "__main__":
 
     def _main():
         filepaths: list[str] = []
-        search_dir: str = "./images/"
+        search_dir: str
+        try:
+            search_dir = check_search_dir_in_arg()
+        except ValueError:
+            search_dir = "./images/"
 
         filepaths.extend(search_file(search_dir, "**/*.png"))
         filepaths.extend(search_file(search_dir, "**/*.jpg"))
 
         if not filepaths:
             print(f"{search_dir}は画像ファイルが存在しません。")
-        if not filepaths:
-            print("画像ファイルが見つかりませんでした。")
             return
 
         image_markers: list[ImageMarker] = [

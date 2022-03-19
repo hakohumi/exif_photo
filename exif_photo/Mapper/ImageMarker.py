@@ -1,13 +1,13 @@
 
 from pathlib import Path
 
-from Reader.exif_reader import ExifImage
+from exif_photo.Reader.exif_reader import ExifImage
 
 
 class ImageMarker:
-    def __init__(self, filepath: Path):
-        self.file_path: Path = filepath
-        self.exif_image = ExifImage(filepath)
+    def __init__(self, file_path: Path):
+        self.file_path: Path = file_path
+        self.exif_image = ExifImage(file_path)
         self.location: tuple[float,
                              float] | None
 
